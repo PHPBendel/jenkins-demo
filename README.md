@@ -1,2 +1,2 @@
 # jenkins-demo
-Testing jenkins
+Just a repository for testing cool things with Jenkins.
