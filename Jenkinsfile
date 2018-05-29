@@ -1,21 +1,31 @@
 pipeline {
     agent any
     stages {
-        stage('No-op') {
+        stage('Build') {
             steps {
-                sh 'ls'
+		withCredentials([sshUserPrivateKey(credentialsId: '7144f627-4881-4b8b-b28f-12549469f5c2',\
+						   keyFileVariable: 'SSH_KEY',\
+						   passphraseVariable: 'SSH_PASS',\
+						   usernameVariable: 'SSH_USERNAME')]) {
+		    sh run-environment.sh
+		    sh echo 'Hello'
+		}
             }
         }
+	stage('Test'){
+	    
+	}
+	stage ('Deploy'){
+	    
+	}
     }
     post {
-            always {
-            echo 'One way or another, I have finished'
+        always {
+	    echo 'One way or another, I have finished'
             deleteDir() /* clean up our workspace */
         }
         success {
-	mail to: 'pedro.bendel@gmail.com',
-        subject: "Success Pipeline: ${currentBuild.fullDisplayName}",
-        body: "Something is right with ${env.BUILD_URL}"
+	    echo 'I succeeded!'
         }
         unstable {
             echo 'I am unstable :/'
